@@ -1,0 +1,22 @@
+from numpy import loadtxt
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+# Деректер қорын жүктеу
+dataset = loadtxt('pima-indians-diabetes.csv', delimiter=",")
+# деректерді х және y-ге бөлу
+X = dataset[:,0:8]
+Y = dataset[:,8]
+# деректерді оқу және тест жиынтықтарына бөлу
+seed = 7
+test_size = 0.33
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=test_size, random_state=seed)
+# оқу деректері жоқ қолайлы модель
+model = XGBClassifier()
+model.fit(X_train, y_train)
+# болжам жасау
+y_pred = model.predict(X_test)
+predictions = [round(value) for value in y_pred]
+# болжамдарды бағалау
+accuracy = accuracy_score(y_test, predictions)
+print("Дәлдігі: %.2f%%" % (accuracy * 100.0))
